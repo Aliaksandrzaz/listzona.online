@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/static/css/main.1639bd89.chunk.css",
-    "main.js": "/static/js/main.be7b8d40.chunk.js",
-    "main.js.map": "/static/js/main.be7b8d40.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.107bb8ca.js",
-    "runtime-main.js.map": "/static/js/runtime-main.107bb8ca.js.map",
-    "static/css/2.ff8bd605.chunk.css": "/static/css/2.ff8bd605.chunk.css",
-    "static/js/2.976669a8.chunk.js": "/static/js/2.976669a8.chunk.js",
-    "static/js/2.976669a8.chunk.js.map": "/static/js/2.976669a8.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.29db102228af95c49e038730c5bc6af7.js": "/precache-manifest.29db102228af95c49e038730c5bc6af7.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/2.ff8bd605.chunk.css.map": "/static/css/2.ff8bd605.chunk.css.map",
-    "static/css/main.1639bd89.chunk.css.map": "/static/css/main.1639bd89.chunk.css.map",
-    "static/js/2.976669a8.chunk.js.LICENSE.txt": "/static/js/2.976669a8.chunk.js.LICENSE.txt"
+    "main.css": "/Aliaksandrzaz/Aliaksandrzaz.github.io/static/css/main.c5f4d235.chunk.css",
+    "main.js": "/Aliaksandrzaz/Aliaksandrzaz.github.io/static/js/main.51fd09d2.chunk.js",
+    "main.js.map": "/Aliaksandrzaz/Aliaksandrzaz.github.io/static/js/main.51fd09d2.chunk.js.map",
+    "runtime-main.js": "/Aliaksandrzaz/Aliaksandrzaz.github.io/static/js/runtime-main.2c37cba6.js",
+    "runtime-main.js.map": "/Aliaksandrzaz/Aliaksandrzaz.github.io/static/js/runtime-main.2c37cba6.js.map",
+    "static/css/2.ff8bd605.chunk.css": "/Aliaksandrzaz/Aliaksandrzaz.github.io/static/css/2.ff8bd605.chunk.css",
+    "static/js/2.aa1628d9.chunk.js": "/Aliaksandrzaz/Aliaksandrzaz.github.io/static/js/2.aa1628d9.chunk.js",
+    "static/js/2.aa1628d9.chunk.js.map": "/Aliaksandrzaz/Aliaksandrzaz.github.io/static/js/2.aa1628d9.chunk.js.map",
+    "index.html": "/Aliaksandrzaz/Aliaksandrzaz.github.io/index.html",
+    "precache-manifest.641b8e3bece63db9b17f477f8f0d954b.js": "/Aliaksandrzaz/Aliaksandrzaz.github.io/precache-manifest.641b8e3bece63db9b17f477f8f0d954b.js",
+    "service-worker.js": "/Aliaksandrzaz/Aliaksandrzaz.github.io/service-worker.js",
+    "static/css/2.ff8bd605.chunk.css.map": "/Aliaksandrzaz/Aliaksandrzaz.github.io/static/css/2.ff8bd605.chunk.css.map",
+    "static/css/main.c5f4d235.chunk.css.map": "/Aliaksandrzaz/Aliaksandrzaz.github.io/static/css/main.c5f4d235.chunk.css.map",
+    "static/js/2.aa1628d9.chunk.js.LICENSE.txt": "/Aliaksandrzaz/Aliaksandrzaz.github.io/static/js/2.aa1628d9.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.107bb8ca.js",
+    "static/js/runtime-main.2c37cba6.js",
     "static/css/2.ff8bd605.chunk.css",
-    "static/js/2.976669a8.chunk.js",
-    "static/css/main.1639bd89.chunk.css",
-    "static/js/main.be7b8d40.chunk.js"
+    "static/js/2.aa1628d9.chunk.js",
+    "static/css/main.c5f4d235.chunk.css",
+    "static/js/main.51fd09d2.chunk.js"
   ]
 }
