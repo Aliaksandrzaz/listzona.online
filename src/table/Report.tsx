@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Modal } from 'antd/lib'
-import { Data } from './service'
+import { Data } from './tableService'
 
 interface Props {
   isOpened: boolean
@@ -24,9 +24,9 @@ const Report = ({ isOpened, close, data }: Props) => {
       }}
       onCancel={() => close(false)}
     >
-      <p>Куплено авто: {data.filter(item => item.isCell === 'has').length}</p>
+      <p>Количесво авто: {data.length}</p>
       <p>
-        Закупка: :
+        Закупка:{' '}
         {data.reduce((acc, item) => {
           if (item.price !== '') {
             acc = acc + parseFloat(item.price)
@@ -35,7 +35,7 @@ const Report = ({ isOpened, close, data }: Props) => {
         }, 0)}
       </p>
       <p>
-        Расходы: :
+        Расходы:{' '}
         {data.reduce((acc, item) => {
           if (item.costs !== '') {
             acc = acc + parseFloat(item.costs)
@@ -44,7 +44,7 @@ const Report = ({ isOpened, close, data }: Props) => {
         }, 0)}
       </p>
       <p>
-        Продано :
+        Продано:{' '}
         {data.reduce((acc, item) => {
           if (item.forSale !== '') {
             acc = acc + parseFloat(item.forSale)
@@ -53,7 +53,7 @@ const Report = ({ isOpened, close, data }: Props) => {
         }, 0)}
       </p>
       <p>
-        Прибыль :
+        Прибыль:{' '}
         {data.reduce((acc, item) => {
           if (item.profit !== '') {
             acc = acc + parseFloat(item.profit)

@@ -4,6 +4,7 @@ import 'firebase/firestore'
 export interface Filter {
   model: string
   mark: string
+  key: string
   time: {
     start: string
     end: string
@@ -37,7 +38,7 @@ export interface Car {
 
 export type Data = Car[]
 
-export class Service {
+export class TableService {
   firebaseConfig = {
     apiKey: 'AIzaSyAS3Tmzpw_YfZnpGdisPnfXZjN8BScjhL0',
     authDomain: 'lehtierittely-bc08d.firebaseapp.com',
@@ -48,45 +49,42 @@ export class Service {
     appId: '1:455064458920:web:b70dc58166e8de8996d49d',
   }
 
-  db: any
-
   dataCar: Data = []
-  allData: Data = []
-  filterData: Data = []
 
   isFilterActive: boolean = false
 
   constructor() {
-    firebase.initializeApp(this.firebaseConfig)
-    this.db = firebase.firestore()
+    this.init()
   }
 
-  fetchData2(dispatch: (data: Data) => void) {
-    return this.db
+  init() {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(this.firebaseConfig)
+    }
+  }
+
+  fetchData(dispatch: (data: Data) => void) {
+    return firebase
+      .firestore()
       .collection('car')
       .doc('NB9Di5WqKJ4Ti29UATtd')
       .onSnapshot(
         (doc: any) => {
-          const data = doc.data() as FirebaseData
-          this.dataCar = Object.values(data)
+          const responseData = doc.data() as FirebaseData
+          const data = Object.values(responseData)
             .map(item => item.car)
             .reverse()
+          this.dataCar = data
 
-          this.filterData = Object.values(data)
-            .map(item => item.car)
-            .reverse()
-          this.allData = Object.values(data)
-            .map(item => item.car)
-            .reverse()
-
-          !this.isFilterActive && dispatch(this.dataCar)
+          dispatch(this.dataCar)
         },
         () => {}
       )
   }
 
-  addData2(car: Car) {
-    this.db
+  addData(car: Car) {
+    firebase
+      .firestore()
       .collection('car')
       .doc('NB9Di5WqKJ4Ti29UATtd')
       .set(
@@ -97,16 +95,15 @@ export class Service {
         },
         { merge: true }
       )
-      .then(() => {
-        console.log('Document written with ID: ')
-      })
+      .then(() => {})
       .catch(() => {
         console.error('Error adding document: ')
       })
   }
 
-  editData2(car: Car) {
-    this.db
+  editData(car: Car) {
+    firebase
+      .firestore()
       .collection('car')
       .doc('NB9Di5WqKJ4Ti29UATtd')
       .update({
@@ -114,9 +111,7 @@ export class Service {
           car,
         },
       })
-      .then(() => {
-        console.log('Document written with ID: ')
-      })
+      .then(() => {})
       .catch(() => {
         console.error('Error adding document: ')
       })
@@ -136,50 +131,39 @@ export class Service {
   }
 
   filter(filterType: Filter, setDataCar: (data: Data) => void) {
-    console.log('filter')
-    const hasCar =
-      filterType.isCell !== ''
-        ? this.allData.filter(item => {
-            if (filterType.isCell === 'has') {
-              return item.isCell === 'has'
-            } else if (filterType.isCell === 'cell') {
-              return item.isCell === 'cell'
-            } else {
-              return item
-            }
-          })
-        : this.allData
+    const filter: Partial<Filter> = {
+      ...(filterType.isCell !== 'all' ? { isCell: filterType.isCell } : {}),
+      ...(filterType.model !== '' ? { model: filterType.model } : {}),
+      ...(filterType.key !== '' ? { key: filterType.key } : {}),
+      ...(filterType.mark !== '' ? { mark: filterType.mark } : {}),
+    }
 
-    const model = filterType.model !== '' ? hasCar.filter(item => item.model === filterType.model) : hasCar
-
-    const mark = filterType.mark !== '' ? model.filter(item => item.mark === filterType.mark) : model
+    const data = this.filterTest(this.dataCar, filter)
 
     const startTime =
       filterType.time.start !== ''
-        ? mark.filter(item => item.buyDay !== '' && +item.buyDay >= +filterType.time.start)
-        : mark
+        ? data.filter(item => item.buyDay !== '' && +item.buyDay >= +filterType.time.start)
+        : data
 
     const finishTime =
       filterType.time.end !== ''
         ? startTime.filter(item => item.buyDay !== '' && +item.buyDay <= +filterType.time.end)
         : startTime
 
-    // this.dataCar = finishTime
     setDataCar(finishTime)
   }
 
+  filterTest(arr: Data, criteria: Partial<Filter>) {
+    return arr.filter(obj => {
+      return Object.keys(criteria).every(c => {
+        // @ts-ignore
+        return obj[c] == criteria[c]
+      })
+    })
+  }
+
   reset(setDataCar: (data: Data) => void) {
-    this.filterData = this.allData
-    setDataCar(this.dataCar)
-  }
-
-  report() {
-    return this.filterData
-  }
-
-  getAllData(setDataCar: (data: Data) => void) {
-    this.filterData = this.allData
-    setDataCar(this.allData)
+    setDataCar([])
   }
 
   dateForTable(type: boolean, setDataCar: (data: Data) => void) {

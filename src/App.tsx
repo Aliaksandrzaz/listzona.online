@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './App.css'
-import TableCar from './table'
-import { Service } from './service'
+import TableCar from './table/table'
+import { Authorization } from './authorization/Authorization'
+import { TableService } from './table/tableService'
 
 const App = () => {
-  const service = new Service()
+  const [isLogin, setIsLogin] = useState(false)
 
   return (
     <div className="App">
-      <TableCar service={service} />
+      <Authorization setIsLogin={setIsLogin} isLogin={isLogin} />
+      {isLogin && <TableCar service={new TableService()} />}
     </div>
   )
 }

@@ -2,16 +2,12 @@ import * as React from 'react'
 import { Table, Button, Radio } from 'antd/lib'
 import 'antd/dist/antd.css'
 import { useEffect, useState } from 'react'
-import { Service } from './service'
 import EditModalCar from './EditModalCar'
 import CreateModalCar from './CreateModalCar'
 import Filters from './Filters'
+import Report from './Report'
 
-interface Props {
-  service: Service
-}
-
-const TableCar = ({ service }: Props) => {
+const TableCar = ({ service }: any) => {
   const columns = [
     {
       title: '№',
@@ -70,6 +66,7 @@ const TableCar = ({ service }: Props) => {
       render: (value: any) => {
         return value.buyDay ? new Date(+value.buyDay).toLocaleDateString() : ''
       },
+      sorter: (a: any, b: any) => parseFloat(a.buyDay) - parseFloat(b.buyDay),
     },
     {
       title: 'Дата продажи',
@@ -116,11 +113,12 @@ const TableCar = ({ service }: Props) => {
   const [isOpenedCreateModal, setOpenedCreateModal] = useState(false)
   const [isOpenedFilters, setOpenedFilters] = useState(false)
   const [isCarsAvailable, setIsCarsAvailable] = useState(true)
+  const [isOpenReportModal, setOpenReportModal] = useState(false)
 
   const [dataCars, setDataCars] = useState(service.dataCar)
 
   useEffect(() => {
-    service.fetchData2(setDataCars)
+    service.fetchData(setDataCars)
   }, [])
 
   useEffect(() => {
@@ -142,18 +140,18 @@ const TableCar = ({ service }: Props) => {
       )}
 
       {!isOpenedFilters && (
-        <div className="options">
-          <Radio.Group
-            onChange={() => {
-              console.log(isCarsAvailable)
-              setIsCarsAvailable(!isCarsAvailable)
-            }}
-            defaultValue={isCarsAvailable}
-            buttonStyle="solid"
-          >
-            <Radio.Button value={false}>Все</Radio.Button>
-            <Radio.Button value={true}>В наличии</Radio.Button>
-          </Radio.Group>
+        <div className="options ">
+          <span>
+            <Radio.Group
+              className="options__radio"
+              onChange={() => setIsCarsAvailable(!isCarsAvailable)}
+              defaultValue={isCarsAvailable}
+              buttonStyle="solid"
+            >
+              <Radio.Button value={false}>Все</Radio.Button>
+              <Radio.Button value={true}>В наличии</Radio.Button>
+            </Radio.Group>
+          </span>
 
           <span>
             <Button type="primary" onClick={() => setOpenedCreateModal(true)}>
@@ -162,6 +160,12 @@ const TableCar = ({ service }: Props) => {
             {isOpenedCreateModal && (
               <CreateModalCar isOpened={isOpenedCreateModal} close={setOpenedCreateModal} service={service} />
             )}
+          </span>
+
+          <span>
+            <Button type="primary" onClick={() => setOpenReportModal(true)}>
+              Отчет
+            </Button>
           </span>
 
           <span>
@@ -178,7 +182,16 @@ const TableCar = ({ service }: Props) => {
         </div>
       )}
 
-      <Table columns={columns} dataSource={dataCars} pagination={false} bordered={true} />
+      <Table
+        columns={columns}
+        dataSource={dataCars}
+        pagination={false}
+        bordered={true}
+        loading={dataCars.length === 0 && !isOpenedFilters}
+      />
+      {isOpenReportModal && (
+        <Report isOpened={isOpenReportModal} close={setOpenReportModal} data={dataCars} />
+      )}
     </>
   )
 }

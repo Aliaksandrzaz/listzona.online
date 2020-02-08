@@ -1,47 +1,45 @@
 import * as React from 'react'
 import { DatePicker, Modal, Radio } from 'antd/lib'
 import { useState } from 'react'
-import { Service } from './service'
-import { parseTime } from './helpers'
-import { Input } from './kit/input'
-import moment from 'moment'
+import { TableService } from './tableService'
+import { parseTime } from '../helpers'
+import { Input } from '../kit/input'
 
 interface Props {
   isOpened: boolean
-  row: any
-  close: (isOpen: string) => void
-  service: Service
+  close: (isOpen: boolean) => void
+  service: TableService
 }
 
-const EditModalCar = ({ isOpened, row, close, service }: Props) => {
+const CreateModalCar = ({ isOpened, close, service }: Props) => {
   const [newCar, setNewCar] = useState({
-    key: row.key,
-    carNumber: row.carNumber,
-    buildCar: row.buildCar,
-    carCheck: row.carCheck,
-    model: row.model,
-    mark: row.mark,
-    mileage: row.mileage,
-    price: row.price,
-    costs: row.costs,
-    forSale: row.forSale,
-    buyDay: row.buyDay,
-    cellDay: row.cellDay,
-    owner: row.owner,
-    isCell: row.isCell,
-    profit: row.profit,
+    key: `${service.dataCar.length + 1}`,
+    carNumber: '',
+    buildCar: '',
+    carCheck: '',
+    model: '',
+    mark: '',
+    mileage: '',
+    price: '',
+    costs: '',
+    forSale: '',
+    buyDay: '',
+    cellDay: '',
+    owner: '',
+    isCell: 'has',
+    profit: '',
   })
 
   return (
     <>
       <Modal
-        title="Редактировать"
+        title="Добавить"
         visible={isOpened}
         onOk={() => {
-          service.editData2(newCar)
-          close('')
+          service.addData(newCar)
+          close(false)
         }}
-        onCancel={() => close('')}
+        onCancel={() => close(false)}
       >
         <div>
           <Input
@@ -58,7 +56,6 @@ const EditModalCar = ({ isOpened, row, close, service }: Props) => {
             <span className="create-item__title">Год выпуска</span>
             <DatePicker
               format="DD-MM-YYYY"
-              value={newCar.buildCar === '' ? null : moment(+newCar.buildCar)}
               onChange={e =>
                 setNewCar({
                   ...newCar,
@@ -71,7 +68,6 @@ const EditModalCar = ({ isOpened, row, close, service }: Props) => {
             <span className="create-item__title">Тех Осмотр</span>
             <DatePicker
               format="DD-MM-YYYY"
-              value={newCar.carCheck === '' ? null : moment(+newCar.carCheck)}
               onChange={e => {
                 setNewCar({
                   ...newCar,
@@ -144,7 +140,6 @@ const EditModalCar = ({ isOpened, row, close, service }: Props) => {
             <span className="create-item__title">Дата покупки</span>
             <DatePicker
               format="DD-MM-YYYY"
-              value={newCar.buyDay === '' ? null : moment(+newCar.buyDay)}
               onChange={e => {
                 setNewCar({
                   ...newCar,
@@ -157,7 +152,6 @@ const EditModalCar = ({ isOpened, row, close, service }: Props) => {
             <span className="create-item__title">Дата продажи</span>
             <DatePicker
               format="DD-MM-YYYY"
-              value={newCar.cellDay === '' ? null : moment(+newCar.cellDay)}
               onChange={e => {
                 setNewCar({
                   ...newCar,
@@ -206,4 +200,4 @@ const EditModalCar = ({ isOpened, row, close, service }: Props) => {
   )
 }
 
-export default EditModalCar
+export default CreateModalCar

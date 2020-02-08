@@ -2,12 +2,12 @@ import { Button, DatePicker, Radio } from 'antd'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 import moment from 'moment'
-import { Data, Service } from './service'
+import { Data, TableService } from './tableService'
 import Report from './Report'
-import { parseTime } from './helpers'
+import { parseTime } from '../helpers'
 
 interface Props {
-  service: Service
+  service: TableService
   setDataCar: (data: Data) => void
   setOpenedFilters: (isOpened: boolean) => void
   dataCar: Data
@@ -17,6 +17,7 @@ const Filters = ({ service, setDataCar, dataCar, setOpenedFilters, isCarsAvailab
   const [filters, setFilters] = useState({
     model: '',
     mark: '',
+    key: '',
     time: {
       start: '',
       end: '',
@@ -25,10 +26,17 @@ const Filters = ({ service, setDataCar, dataCar, setOpenedFilters, isCarsAvailab
   })
 
   const [isOpenReportModal, setOpenReportModal] = useState(false)
+  const [isFilter, setIsFilter] = useState(false)
 
   useEffect(() => {
-      setDataCar([])
+    setDataCar([])
   }, [])
+
+  useEffect(() => {
+    if (dataCar.length > 0 && isFilter) {
+      service.filter(filters, setDataCar)
+    }
+  }, [service.dataCar, isFilter])
 
   return (
     <div className="filters">
@@ -56,8 +64,34 @@ const Filters = ({ service, setDataCar, dataCar, setOpenedFilters, isCarsAvailab
               ...filters,
               time: {
                 ...filters.time,
-                end: e !== null ? `${+parseTime(e) + 10000}` : '',
+                end: e !== null ? `${+parseTime(e)}` : '',
               },
+            })
+          }
+        />
+      </div>
+
+      <div className="filters-item">
+        <input
+          placeholder="Модель"
+          value={filters.model}
+          onChange={e =>
+            setFilters({
+              ...filters,
+              model: e.target.value,
+            })
+          }
+        />
+      </div>
+
+      <div className="filters-item">
+        <input
+          placeholder="Позиция"
+          value={filters.key}
+          onChange={e =>
+            setFilters({
+              ...filters,
+              key: e.target.value,
             })
           }
         />
@@ -65,29 +99,16 @@ const Filters = ({ service, setDataCar, dataCar, setOpenedFilters, isCarsAvailab
 
       {/*<div className="filters-item">*/}
       {/*  <input*/}
-      {/*    placeholder="Модель"*/}
-      {/*    value={filters.model}*/}
-      {/*    onChange={e =>*/}
-      {/*      setFilters({*/}
+      {/*    value={filters.mark}*/}
+      {/*    placeholder="Марка"*/}
+      {/*    onChange={e => {*/}
+      {/*      return setFilters({*/}
       {/*        ...filters,*/}
-      {/*        model: e.target.value,*/}
+      {/*        mark: e.target.value,*/}
       {/*      })*/}
-      {/*    }*/}
+      {/*    }}*/}
       {/*  />*/}
       {/*</div>*/}
-
-      <div className="filters-item">
-        <input
-          value={filters.mark}
-          placeholder="Марка"
-          onChange={e => {
-            return setFilters({
-              ...filters,
-              mark: e.target.value,
-            })
-          }}
-        />
-      </div>
 
       <div>
         <Radio.Group
@@ -109,24 +130,32 @@ const Filters = ({ service, setDataCar, dataCar, setOpenedFilters, isCarsAvailab
         <Button
           type="primary"
           onClick={() => {
+            setIsFilter(true)
+            service.filter(filters, setDataCar)
+          }}
+        >
+          Применить
+        </Button>
+
+        <Button
+          type="primary"
+          onClick={() => {
             service.reset(setDataCar)
 
             setFilters({
               model: '',
               mark: '',
+              key: '',
               time: {
                 start: '',
                 end: '',
               },
               isCell: 'all',
             })
+            setIsFilter(false)
           }}
         >
           Сбросить
-        </Button>
-
-        <Button type="primary" onClick={() => service.filter(filters, setDataCar)}>
-          Применить
         </Button>
 
         <Button type="primary" onClick={() => setOpenReportModal(true)}>
